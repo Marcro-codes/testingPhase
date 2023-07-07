@@ -1,55 +1,47 @@
 package com.Bank.userManagement;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 
 @RestController
 public class StudentController {
 
-    HashMap<Integer, Student> db = new HashMap<>();
-
-//    // udpate using PathVariable
-    @PutMapping("/update/{id}/{state}")
-    public String updt(@PathVariable("id") int id, @PathVariable("state") String state){
-        if(!db.containsKey(id)) return "Idvalid";
-
-        db.get(id).setState(state);
-        return "Kaam Hogya";
-    }
-
-//  //  Update using RequestParam
-
-//    @PutMapping("/updateState")
-//    public String update(@RequestParam("id") int no, @RequestParam("updateState") String state){
-//
-//        if(!db.containsKey(no)) return "invalid";
-//
-//        db.get(no).setState(state);
-//        return "Update Successfully";
-//    }
-
+    @Autowired
+    StudentService studentService;
 
     @PostMapping("/post")
-    public String postStudent(@RequestBody Student student) {
-        int no = student.getNo();
-        db.put(no ,student);
-        return "Student added successfully";
+    public String addStudent(@RequestBody Student student) {
+        return studentService.addStudent(student);
+
+//        just for Port Reference : localhost:1111/post
     }
 
-    @GetMapping("/get/{id}")
-    public Student getStudent(@PathVariable("id") int no) {
-        return db.get(no);
+    @GetMapping("/get/{no}")
+    public Student getStudent(@PathVariable("no") int no){
+        return studentService.getStudent(no);
+
+//        refer : localhost:1111/get/2
     }
 
-    @DeleteMapping("/dlt/{no}")
-    public String deleteStudent(@PathVariable("no") int no) {
+    @DeleteMapping("/delete")
+    public String deleteStudent(@RequestParam("no") int no) {
+        return studentService.deleteStudent(no);
 
-        if(!db.containsKey(no)) return "INVALID";
-
-        db.remove(no);
-        return "Student Removed!";
+//        refer : localhost:1111/delete?no=2
     }
 
+    @PutMapping("/updateState/{no}/{state}")
+    public String updateState(@PathVariable("no") int no, @PathVariable("state") String state){
+        return  studentService.updateState(no, state);
+
+//        refer : localhost:1111/updateState/1/dhule-chinchgalli
+    }
+
+    @PutMapping("/updateName")
+    public String updateName(@RequestParam("no") int no, @RequestParam("name") String name) {
+        return studentService.updateName(no, name);
+
+//        refer : localhost:1111/updateName?no=1&name=RassMalai
+    }
 }
