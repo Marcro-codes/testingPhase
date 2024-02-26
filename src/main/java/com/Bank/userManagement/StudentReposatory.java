@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 @Repository
 public class StudentReposatory {
-
+//this is the standard changes
     HashMap<Integer,Student> db = new HashMap<>();
 
     public String addStudent(Student student) {
